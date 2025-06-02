@@ -11,7 +11,7 @@ async def test_create_task(auth_client: AsyncClient, category, user):
             "title": "New Task",
             "description": "New Description",
             "priority": 3,
-            "due_date": None,
+            "due_date": "2025-01-01T00:00:00Z",
             "is_completed": False,
             "category_id": category.id,
         },
