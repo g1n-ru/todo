@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload, joinedload
 
 from app.tasks.constants import TaskOrderBy
 from app.users.models import Task
@@ -30,11 +31,11 @@ class TaskRepository:
         )
         self.db.add(task)
         await self.db.commit()
-        await self.db.refresh(task)
+        task = await self.get_by_id(task.id)
         return task
 
     async def get_by_id(self, task_id: int) -> Task | None:
-        result = await self.db.execute(select(Task).where(Task.id == task_id))
+        result = await self.db.execute(select(Task).where(Task.id == task_id).options(joinedload(Task.owner), selectinload(Task.category)))
         return result.scalars().first()
 
     async def get_by_owner(
@@ -56,6 +57,7 @@ class TaskRepository:
             .offset(skip)
             .limit(limit)
             .order_by(order[order_by])
+            .options(joinedload(Task.owner), selectinload(Task.category))
         )
         if is_completed is not None:
             query = query.where(Task.is_completed == is_completed)
@@ -72,7 +74,7 @@ class TaskRepository:
         for key, value in updated_data.items():
             setattr(task, key, value)
         await self.db.commit()
-        await self.db.refresh(task)
+        task = await self.get_by_id(task_id)
         return task
 
     async def delete(self, task_id: int) -> bool:

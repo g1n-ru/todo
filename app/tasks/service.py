@@ -35,7 +35,7 @@ class TaskService:
         category_id: int | None = None,
         skip: int = 0,
         limit: int = 10,
-    ) -> TaskOut | None:
+    ) -> list[TaskOut]:
         db_tasks = await self.repository.get_by_owner(
             owner_id, order_by, is_completed, category_id, skip, limit
         )
