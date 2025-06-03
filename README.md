@@ -12,11 +12,12 @@ git clone https://github.com/g1n-ru/todo.git
 Создайте файл .env в корне проекта и добавьте следующие переменные:
 
 ```env
-DATABASE_URL=postgresql+asyncpg://postgres:postgres@db/todo_db
+DATABASE_URL=postgresql+asyncpg://postgres:your_password_here@db/todo_db
 SECRET_KEY=your_secret_key_here
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 REFRESH_TOKEN_EXPIRE_MINUTES=1440
+POSTGRES_PASSWORD=your_password_here
 ```
 
 3. Запуск приложения
