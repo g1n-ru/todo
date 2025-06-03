@@ -24,6 +24,17 @@ async def test_get_category(auth_client: AsyncClient, category, db_session, user
 
 
 @pytest.mark.asyncio
+async def test_get_categories(auth_client: AsyncClient, category):
+    response = await auth_client.get(
+        "/api/v1/categories/",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert len(data) > 0
+    assert data[0]["name"] == "Test Category"
+
+
+@pytest.mark.asyncio
 async def test_update_category(auth_client: AsyncClient, category, db_session, user):
     response = await auth_client.put(
         f"/api/v1/categories/{category.id}", json={"name": "Updated Category"}

@@ -34,3 +34,10 @@ class CategoryService:
 
     async def delete_category(self, category_id: int) -> bool:
         return await self.repository.delete(category_id)
+
+    async def get_categories_by_owner(
+        self,
+        owner_id: int,
+    ) -> list[CategoryOut]:
+        db_tasks = await self.repository.get_by_owner(owner_id)
+        return [CategoryOut.model_validate(t, from_attributes=True) for t in db_tasks]

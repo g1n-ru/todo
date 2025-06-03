@@ -61,3 +61,11 @@ async def delete_category(
             status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
         )
     return {"detail": "Category deleted"}
+
+
+@router.get("/", response_model=list[CategoryOut])
+async def get_tasks(
+    current_user: UserOut = Depends(get_current_user),
+    service: CategoryService = Depends(get_category_service),
+):
+    return await service.get_categories_by_owner(owner_id=current_user.id)
